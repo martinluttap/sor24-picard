@@ -1,4 +1,4 @@
-SOFTWARE := "picard"
+SOFTWARE := "sor24-picard"
 BASE_CONTAINER_REGISTRY := "ghcr.io/martinluttap"
 VERSION := `basename $(pwd)`
 SHORT_HASH := `git rev-parse --short HEAD`
