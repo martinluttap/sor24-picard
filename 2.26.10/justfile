@@ -1,0 +1,26 @@
+SOFTWARE := "picard"
+BASE_CONTAINER_REGISTRY := "ghcr.io/martinluttap"
+VERSION := `basename $(pwd)`
+SHORT_HASH := `git rev-parse --short HEAD`
+DOCKER_IMAGE := BASE_CONTAINER_REGISTRY/SOFTWARE + ":" + VERSION
+DOCKER_IMAGE_HASH := BASE_CONTAINER_REGISTRY/SOFTWARE + ":" + VERSION + "-" + SHORT_HASH
+
+DOCKERFILE := "../Dockerfile.multi"
+
+emit-dockerfile:
+    @echo {{DOCKERFILE}}
+
+build-docker:
+  docker build \
+  -t "{{DOCKER_IMAGE}}" \
+  -t "{{DOCKER_IMAGE_HASH}}" \
+  -f {{DOCKERFILE}} \
+  . \
+  --build-arg VERSION="{{VERSION}}" \
+  --build-arg REPOSITORY="{{BASE_CONTAINER_REGISTRY}}"
+
+publish-docker:
+	@echo
+	@echo -- Publishing docker --
+	docker push "{{DOCKER_IMAGE}}"
+	docker push "{{DOCKER_IMAGE_HASH}}"

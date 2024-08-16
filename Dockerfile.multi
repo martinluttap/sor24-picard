@@ -1,0 +1,16 @@
+ARG REPOSITORY="ghcr.io/martinluttap/"
+ARG BUILDER_TAG=1.0.0
+FROM ${REPOSITORY}/bio-ubuntu:${BUILDER_TAG}
+
+ARG VERSION
+
+ENV PICARD_URL=https://github.com/broadinstitute/picard/releases/download/${VERSION}/picard.jar
+
+# Pre-create man dir to avoid bug
+RUN mkdir -p /usr/share/man/man1 \
+    &&apt-get update \
+    && apt-get install -y \
+       openjdk-11-jre-headless \
+       wget \
+    && wget -O /usr/local/bin/picard.jar $PICARD_URL \
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
